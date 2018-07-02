@@ -1,0 +1,50 @@
+stages:
+- image
+- mirror
+
+'2.4':
+  stage: image
+  image: docker:latest
+  services:
+  - docker:dind
+  script: |
+    mkdir -p ~/.docker && echo "$DOCKER_AUTH_CONFIG" >~/.docker/config.json
+    export suffix=`expr $CI_COMMIT_TAG ':' '2.4-\(.*\)'`
+    docker build --pull \
+      --build-arg HTTP_PROXY=${HTTP_PROXY} \
+      --build-arg HTTPS_PROXY=${HTTPS_PROXY} \
+      --build-arg NO_PROXY=${NO_PROXY} \
+      --build-arg http_proxy=${HTTP_PROXY} \
+      --build-arg https_proxy=${HTTPS_PROXY} \
+      --build-arg no_proxy=${NO_PROXY} \
+      -t ubleipzig/httpd:2.4 \
+      -f 2.4/Dockerfile \
+      2.4
+    docker push ubleipzig/httpd:2.4
+    for tag in "latest" "2" "2.4-${suffix}"; do
+      docker tag ubleipzig/httpd:2.4 ubleipzig/httpd:${tag}
+      docker push ubleipzig/httpd:${tag}
+    done
+  tags:
+  - docker
+  only:
+  - /^2.4/
+  except:
+  - branches
+
+github_mirror:
+  stage: mirror
+  image:
+    name: alpine/git
+    entrypoint: [ "/bin/sh", "-c" ]
+  variables:
+    GIT_STRATEGY: clone
+    GIT_CHECKOUT: "false"
+  script: |
+    cd /tmp
+    git clone --mirror ${CI_REPOSITORY_URL} project
+    cd project
+    git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/ubleipzig/httpd.git
+    git push --mirror github
+  tags:
+  - docker
