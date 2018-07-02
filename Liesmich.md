@@ -77,7 +77,7 @@ $# docker run --name httpd \
 *	`APACHE_DOC_ROOT=/var/www/html`: Das Document-Root aus dem der Inhalt ausgeliefert wird.
 
 [VuFind]: https://github.com/vufind-org/vufind
-[ubleipzig/shibboleth]: https://hub.docker.com/r/ubleipzig/vufind-shibboleth/
+[ubleipzig/shibboleth]: https://hub.docker.com/r/ubleipzig/shibboleth/
 [ubleipzig/vufind-php]: https://hub.docker.com/r/ubleipzig/vufind-php/
 [ubleipzig/vufind-httpd]: https://hub.docker.com/r/ubleipzig/vufind-httpd/
 [debian:stretch-slim]: https://hub.docker.com/_/debian/
