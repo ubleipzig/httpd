@@ -2,11 +2,11 @@ FROM debian:stretch-slim
 #ENTRYPOINT [ "/docker-entrypoint" ]
 CMD ["apache2", "-D", "FOREGROUND"]
 
-ENV BASE_PATH="" \
-	SHIB_HANDLER_URL=/Shibboleth.sso \
+ENV SHIB_HANDLER_URL=/Shibboleth.sso \
 	APACHE_RUN_DIR=/var/run/apache2 \
 	APACHE_RUN_USER=www-data \
-	APACHE_RUN_GROUP=www-data
+	APACHE_RUN_GROUP=www-data \
+	APACHE_DOC_ROOT=/var/www/html
 
 #ADD assets/docker-entrypoint /docker-entrypoint
 ADD assets/*.conf /etc/apache2/conf-available/
@@ -20,8 +20,10 @@ RUN apt-get update \
 	&& apt-get autoremove -y --purge \
 	&& sed -e 's!^\(ErrorLog\).*$!\1 /proc/self/fd/2!' -i /etc/apache2/apache2.conf \
 	&& sed -e 's!^\(PidFile.*\)$!#\1!' -i /etc/apache2/apache2.conf \
+	&& sed -e 's!/var/www/html!${APACHE_DOC_ROOT}!g' -i /etc/apache2/sites-available/000-default.conf \
 	&& sed -e 's!^\(\s*ErrorLog\).*$!\1 /proc/self/fd/2!' -i /etc/apache2/sites-available/000-default.conf \
 	&& sed -e 's!^\(\s*CustomLog\).*$!\1 /proc/self/fd/1 combined!' -i /etc/apache2/sites-available/000-default.conf \
+	&& sed -e 's!/var/www/html!${APACHE_DOC_ROOT}!g' -i /etc/apache2/sites-available/default-ssl.conf \
 	&& sed -e 's!^\(\s*ErrorLog\).*$!\1 /proc/self/fd/2!' -i /etc/apache2/sites-available/default-ssl.conf \
 	&& sed -e 's!^\(\s*CustomLog\).*$!\1 /proc/self/fd/1 combined!' -i /etc/apache2/sites-available/default-ssl.conf \
   && a2disconf serve-cgi-bin other-vhosts-access-log \

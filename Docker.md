@@ -69,6 +69,14 @@ $# docker run --name httpd \
   apache2 -D FOREGROUND -D shibboleth
 ```
 
+## Advanced configuration
+
+* `SHIB_HANDLER_URL=/Shibboleth.sso`: where apache's sibboleth-handler listens. only with `-D shibboleth`.
+* `APACHE_RUN_DIR=/var/run/apache2`: the working directory of the httpd-daemon. almost always unnecessary to change. know, what you do.
+* `APACHE_RUN_USER=www-data`: the user the httpd-daemon runs with. almost always unnecessary to change. know, what you do.
+* `APACHE_RUN_GROUP=www-data`: the group the httpd-daemon runs with. almost always unnecessary to change. know, what you do.
+*	`APACHE_DOC_ROOT=/var/www/html`: the document root of the content to deliver.
+
 [VuFind]: https://github.com/vufind-org/vufind
 [ubleipzig/shibboleth]: https://hub.docker.com/r/ubleipzig/vufind-shibboleth/
 [ubleipzig/vufind-php]: https://hub.docker.com/r/ubleipzig/vufind-php/
