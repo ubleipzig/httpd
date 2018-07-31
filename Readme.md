@@ -25,6 +25,12 @@ _this will create a new image with a tag named `2.4-2`. Also the Tags `2.4`, `2`
 
 Only Repository-Masters will be able to create a new Tag.
 
+### Alpha-Images
+Each branch beginning with as number as for merge requests created by gitlab results in an alpha-image named `ubleipzig/httpd:2.4-<branch-name>`. This images are built when the branch is pushed.
+
+### Staging-Images
+When a push to `master` is made gitlab-ci creates an image named `ubleipzig/httpd:2.4-staging`.
+
 ## Contribution
 
 In case you want to contribute please fork and make a pull-request at [Gitlab-hosting of Leipzig University]. This is due to internal policies and the higher flexibility when it comes to build images and push to [Docker-Hub]
